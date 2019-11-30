@@ -21,6 +21,8 @@ class Firebase{
         this.db = app.database();
 
         this.googleProvider = new app.auth.GoogleAuthProvider();
+        this.facebookProvider = new app.auth.FacebookAuthProvider();
+        this.githubProvider = new app.auth.GithubAuthProvider();
     }
     
     // ********** Auth API ************ //
@@ -37,6 +39,11 @@ class Firebase{
 
     doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider)
 
+    doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
+
+    doSignInWithGithub = () => this.auth.signInWithPopup(this.githubProvider);
+
+    
     // ********* User API ************ //
 
     user = uid => this.db.ref(`users/${uid}`);
