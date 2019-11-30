@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import SignOutButton from '../SignOut/index'
 import * as ROUTES from '../../constants/routes';
+import * as ROLES from '../../constants/roles';
 import {AuthUserContext} from './../Session/index';
 
 
@@ -9,13 +10,13 @@ const Navigation = () => (
     <div>
     <AuthUserContext.Consumer>
         {
-            authUser => authUser ? <NavigationAuth/> : <NavigationNonAuth />
+            authUser => authUser ? <NavigationAuth authUser={authUser}/> : <NavigationNonAuth />
         }
     </AuthUserContext.Consumer>
     </div>
 )
 
-const NavigationAuth = () => (
+const NavigationAuth = ({authUser}) => (
     <div>
         <ul>
             <li>
@@ -28,6 +29,9 @@ const NavigationAuth = () => (
             <li>
                 <Link to={ROUTES.ACCOUNT}>Account</Link>
             </li>
+            {authUser.roles.includes(ROLES.ADMIN) && <li>
+                <Link to={ROUTES.ADMIN}>Admin</Link>
+            </li>}
             <li>
                 <SignOutButton />
             </li>

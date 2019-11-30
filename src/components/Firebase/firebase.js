@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const config = {
     apiKey: "AIzaSyAjOoiiKx88S8BHd5MbFrTAc1ZqbSqY2S4",
@@ -17,6 +18,9 @@ class Firebase{
         app.initializeApp(config);
 
         this.auth = app.auth();
+        this.db = app.database();
+
+        this.googleProvider = new app.auth.GoogleAuthProvider();
     }
     
     // ********** Auth API ************ //
@@ -30,6 +34,37 @@ class Firebase{
     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
     doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+
+    doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider)
+
+    // ********* User API ************ //
+
+    user = uid => this.db.ref(`users/${uid}`);
+    users = () => this.db.ref('users')
+
+    // ********* Merge auth and db user API ***********//
+    onAuthUserListener = (next, fallback) => this.auth.onAuthStateChanged(authUser => {
+        if(authUser){
+            this.user(authUser.uid).once('value').then(snapshot => {
+                const dbUser = snapshot.val();
+
+                // default empty roles
+                if(!dbUser.roles)
+                {
+                    dbUser.roles = [];
+                }
+                // merge auth and db User
+                authUser = {
+                    uid: authUser.uid,
+                    email: authUser.email,
+                    ...dbUser
+                }
+                next(authUser)
+            })
+        }else{
+            fallback()
+        }
+    })
 }
 
 export default Firebase;
