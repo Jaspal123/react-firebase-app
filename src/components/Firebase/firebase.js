@@ -44,6 +44,9 @@ class Firebase{
 
     doSignInWithGithub = () => this.auth.signInWithPopup(this.githubProvider);
 
+    doSendEmailVerification = () => this.auth.currentUser.sendEmailVerification({
+        url: "http://localhost:3000"
+    })
     
     // ********* User API ************ //
 
@@ -65,6 +68,8 @@ class Firebase{
                 authUser = {
                     uid: authUser.uid,
                     email: authUser.email,
+                    emailVerified: authUser.emailVerified,
+                    providerData: authUser.providerData,
                     ...dbUser
                 }
                 next(authUser)
