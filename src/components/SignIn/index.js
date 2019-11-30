@@ -28,7 +28,7 @@ const INITIAL_STATE={
 const ERROR_CODE_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential'
 const ERROR_MSG_ACCOUNT_EXISTS = `
     AN account with an E-mail address to the social account already exists. Try
-    to login from thisaccount instead and associate your social accounts on
+    to login from this account instead and associate your social accounts on
     your personal account page.
 `
 
